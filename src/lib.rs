@@ -31,7 +31,7 @@ fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
 /// A Python module implemented in Rust.
 #[pymodule]
 fn py_core(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(start_ping_service,m)?)?;
+    // m.add_function(wrap_p yfunction!(start_ping_service,m)?)?;
     m.add_function(wrap_pyfunction!(start_chat_service, m)?)?;
     m.add_function(wrap_pyfunction!(sum_as_string, m)?)?;
     Ok(())
