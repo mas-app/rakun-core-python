@@ -1,9 +1,9 @@
 mod service;
-mod chat;
+mod chat_service;
 
 use pyo3::{prelude::*, wrap_pyfunction};
 use service::run_peer;
-use chat::chat;
+use chat_service::chat;
 
 
 #[pyfunction]
