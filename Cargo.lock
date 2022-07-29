@@ -2216,6 +2216,7 @@ dependencies = [
 name = "py_core"
 version = "0.1.0"
 dependencies = [
+ "bytes",
  "futures",
  "libp2p",
  "libp2p-tcp",

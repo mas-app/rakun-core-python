@@ -15,4 +15,5 @@ libp2p-tcp = "0.34.0"
 pyo3-asyncio = { version = "0.16", features = ["tokio-runtime"] }
 futures = "0.3.21"
 tokio = "1.20.0"
+bytes = "1.2.0"
 pyo3-log = "0.6.0"
