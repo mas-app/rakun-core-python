@@ -41,12 +41,14 @@ impl NetworkBehaviourEventProcess<MdnsEvent> for AppBehaviour {
         match event {
             MdnsEvent::Discovered(list) => {
                 for (peer, _) in list {
+                    println!("Discovered: {:?}", peer);
                     self.flood_sub.add_node_to_partial_view(peer);
                 }
             }
             MdnsEvent::Expired(list) => {
                 for (peer, _) in list {
                     if !self.mdns.has_node(&peer) {
+                        println!("Expired: {:?}", peer);
                         self.flood_sub.remove_node_from_partial_view(&peer);
                     }
                 }
