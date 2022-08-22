@@ -2,9 +2,7 @@ extern crate core;
 
 mod chat;
 
-use std::ffi::OsString;
 use clap::{Args, Parser, Subcommand};
-use std::path::PathBuf;
 
 /// A fictional versioning CLI
 #[derive(Debug, Parser)] // requires `derive` feature
@@ -13,49 +11,31 @@ use std::path::PathBuf;
 struct Cli {
     #[clap(subcommand)]
     command: Commands,
+    #[clap(long)]
+    name: Option<String>,
+    #[clap(long)]
+    host: Option<String>,
+    #[clap(long, short = 'c')]
+    config: Option<String>,
 }
 
 #[derive(Debug, Subcommand)]
 enum Commands {
     /// Start Agent
-    #[clap(arg_required_else_help = true)]
-    Start {
-        /// Starting Agent Name
-        name: String,
-        /// optional: Host to connect
-        host: Option<String>,
-    },
+    Start,
     /// Stop Agent
-    #[clap(arg_required_else_help = true)]
-    Stop {
-        /// Stopping Agent Name
-        name: String,
-    },
-    Client(Client),
-}
-
-#[derive(Debug, Args)]
-#[clap(args_conflicts_with_subcommands = true)]
-struct Client {
-    #[clap(subcommand)]
-    command: Option<ClientCommands>,
-
-    #[clap(short, long, value_parser)]
-    name: String,
-
-    host: Option<String>,
-}
-
-#[derive(Debug, Subcommand)]
-enum ClientCommands {
+    Stop,
+    /// Pause Agent
+    Pause,
     /// Get Agent Status
     Status,
     /// Chat with Agent
-    Chat {
+    Command {
         /// Agent message
         message: String,
     },
 }
+
 
 #[derive(Debug, Args)]
 struct StashPush {
@@ -65,25 +45,28 @@ struct StashPush {
 
 fn main() {
     let args = Cli::parse();
+    let name = args.name.unwrap_or("rakun".to_string());
+    let host = args.host.unwrap_or("localhost".to_string());
+    let config = args.config.unwrap_or("config.toml".to_string());
+
+    println!("{:?}, {:?}, {:?}", name, host, config);
+
 
     match args.command {
-        Commands::Start { name, host } => {
-            println!("Starting Agent {} on {}", name, host.unwrap_or_else(|| "F-NODE".to_string()));
+        Commands::Start => {
+            println!("Start Agent");
         }
-        Commands::Stop { name } => {
-            println!("Stopping Agent {}", name);
+        Commands::Stop => {
+            println!("Stop Agent");
         }
-        Commands::Client(client) => {
-            let client_cmd = client.command.unwrap_or(ClientCommands::Status);
-            let host = client.host.unwrap_or_else(|| "F-NODE".to_string());
-            match client_cmd {
-                ClientCommands::Status => {
-                    println!("Agent {} is online at {} ", client.name, host);
-                }
-                ClientCommands::Chat { message } => {
-                    println!("Agent {} said: {}", client.name, message);
-                }
-            }
+        Commands::Pause => {
+            println!("Pause Agent");
+        }
+        Commands::Status => {
+            println!("Get Agent Status");
+        }
+        Commands::Command { message } => {
+            println!("Chat with Agent: {}", message);
         }
     }
 }

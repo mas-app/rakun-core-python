@@ -6,7 +6,7 @@ use libp2p::{
     mdns::{Mdns, MdnsEvent},
     mplex,
     noise,
-    swarm::{dial_opts::DialOpts, NetworkBehaviourEventProcess, SwarmBuilder, SwarmEvent},
+    swarm::{NetworkBehaviourEventProcess, SwarmBuilder, SwarmEvent},
     // `TokioTcpTransport` is available through the `tcp-tokio` feature.
     tcp::TokioTcpTransport,
     Multiaddr,
