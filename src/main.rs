@@ -1,8 +1,9 @@
 extern crate core;
 
-mod chat;
+mod rakun;
 
 use clap::{Args, Parser, Subcommand};
+use names::Generator;
 
 /// A fictional versioning CLI
 #[derive(Debug, Parser)] // requires `derive` feature
@@ -45,19 +46,27 @@ struct StashPush {
 
 fn main() {
     let args = Cli::parse();
-    let name = args.name.unwrap_or("rakun".to_string());
+    let name = match args.name {
+        Some(name) => name,
+        None => {
+            let mut generator = Generator::default();
+            generator.next().unwrap()
+        },
+    };
+
+
     let host = args.host.unwrap_or("localhost".to_string());
     let config = args.config.unwrap_or("config.toml".to_string());
 
-    println!("{:?}, {:?}, {:?}", name, host, config);
 
+    let rakun_service = rakun::service::RakunService::new(name, host, config, 8080);
 
     match args.command {
         Commands::Start => {
-            println!("Start Agent");
+            rakun_service.start();
         }
         Commands::Stop => {
-            println!("Stop Agent");
+            rakun_service.stop();
         }
         Commands::Pause => {
             println!("Pause Agent");
